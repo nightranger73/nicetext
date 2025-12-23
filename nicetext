@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# Valori di default
+FONT="Ubuntu-Bold"
+MESSAGE="Welcome, $USER"
+COLOR_SCHEME="sky"
+
+#!/bin/bash
+
+# --- Configurazione Default ---
+FONT="Ubuntu-Bold"
+MESSAGE="Welcome, $USER"
+COLOR_SCHEME="sky"
+SIZE="72"
+
+# --- Controllo Dipendenze ---
+if ! command -v magick &> /dev/null || ! command -v chafa &> /dev/null; then
+    echo "Errore: Assicurati che 'imagemagick' e 'chafa' siano installati."
+    exit 1
+fi
+
+# --- Funzione help ---
+usage() {
+    echo "Utilizzo: $0 [OPZIONI]"
+    echo ""
+    echo "Opzioni:"
+    echo "  -f FONT          Nome del font (es: 'DejaVu-Sans-Bold')"
+    echo "  -m MESSAGGIO     Testo da visualizzare"
+    echo "  -c COLORE        Schema colori: sky (def), fire, forest, neon, sunset, ocean, cyberpunk"
+    echo "  -s DIMENSIONE    Dimensione del carattere (def: 72)"
+    echo "  -h               Mostra questo aiuto"
+    exit 1
+}
+
+# --- Parsing degli argomenti ---
+while getopts "f:m:c:s:h" opt; do
+    case $opt in
+        f) FONT="$OPTARG" ;;
+        m) MESSAGE="$OPTARG" ;;
+        c) COLOR_SCHEME="$OPTARG" ;;
+        s) SIZE="$OPTARG" ;;
+        h|*) usage ;;
+    esac
+done
+
+# --- Definizione dei Gradienti ---
+# Barycentric: 0,0 (top-left) | %[fx:w],0 (top-right) | %[fx:w],%[fx:h] (bottom-right)
+case $COLOR_SCHEME in
+    fire) 
+        GRADIENT="0,0 #ff8c00 %[fx:w],0 #ff0000 %[fx:w],%[fx:h] #8b0000" 
+        ;;
+    forest) 
+        GRADIENT="0,0 #90ee90 %[fx:w],0 #228b22 %[fx:w],%[fx:h] #006400" 
+        ;;
+    neon)   
+        GRADIENT="0,0 #00ffff %[fx:w],0 #ff00ff %[fx:w],%[fx:h] #ffff00" 
+        ;;
+    sunset) 
+        GRADIENT="0,0 #ff5e62 %[fx:w],0 #ff9966 %[fx:w],%[fx:h] #ff5e62" 
+      ;;
+    ocean) 
+        GRADIENT="0,0 #2193b0 %[fx:w],0 #6dd5ed %[fx:w],%[fx:h] #2193b0" 
+      ;;
+    cyberpunk) 
+        GRADIENT="0,0 #ff00ff %[fx:w],0 #00ffff %[fx:w],%[fx:h] #0000ff" 
+      ;;
+    sky|*)  
+        GRADIENT="0,0 white %[fx:w],0 #87CEEB %[fx:w],%[fx:h] #800080" 
+        ;;
+esac
+
+# --- Generazione e Visualizzazione ---
+# Generiamo l'immagine tramite label: e applichiamo il gradiente come maschera
+magick -background none -pointsize "$SIZE" -font "$FONT" \
+    label:"$MESSAGE" \
+    \( +clone -sparse-color Barycentric "$GRADIENT" \) \
+    -compose In -composite \
+    -define png:exclude-chunks=bKGD png:- | chafa --format kitty -
