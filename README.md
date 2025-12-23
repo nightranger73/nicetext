@@ -28,3 +28,6 @@ or inside other scripts to better read the output on the screen
 
 <img width="737" height="627" alt="Schermata_20251222_224547-1" src="https://github.com/user-attachments/assets/5a31cc9a-177f-4755-8869-26b4837b1768" />
 
+Other example of usage:
+
+<img width="944" height="620" alt="Schermata_20251222_223227" src="https://github.com/user-attachments/assets/5a25acdb-6956-41c5-bad3-60368d6fe969" />
