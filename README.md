@@ -24,9 +24,11 @@ This scripts can be used as a replacement for banner text like figlet or toilet 
 
 <img width="1920" height="1200" alt="Schermata_20251222_225110" src="https://github.com/user-attachments/assets/f4af979b-95bf-4894-9999-cc24af46eb69" />
 
+
 or inside other scripts to better read the output on the screen
 
 <img width="737" height="627" alt="Schermata_20251222_224547-1" src="https://github.com/user-attachments/assets/5a31cc9a-177f-4755-8869-26b4837b1768" />
+
 
 Other example of usage:
 
