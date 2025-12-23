@@ -19,6 +19,14 @@ imagemagick
 chafa
 ```
 
+## Tips
+To retrieve a list of available Fonts you can use the following command:
+```
+magick -list font | grep "Font:" | awk '{print $2}'
+```
+or, alternatively, you can specify a full pathname to a .ttf file
+
+
 ## Description and examples
 This scripts can be used as a replacement for banner text like figlet or toilet enhancing the look of your terminal, as a greeting at your login screen
 
