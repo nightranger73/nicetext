@@ -1,38 +1,31 @@
 #!/bin/bash
 
-# Valori di default
-FONT="Ubuntu-Bold"
-MESSAGE="Welcome, $USER"
-COLOR_SCHEME="sky"
-
-#!/bin/bash
-
-# --- Configurazione Default ---
+# default values
 FONT="Ubuntu-Bold"
 MESSAGE="Welcome, $USER"
 COLOR_SCHEME="sky"
 SIZE="72"
 
-# --- Controllo Dipendenze ---
+# --- Checking for installed tools ---
 if ! command -v magick &> /dev/null || ! command -v chafa &> /dev/null; then
-    echo "Errore: Assicurati che 'imagemagick' e 'chafa' siano installati."
+    echo "Error: You need both 'imagemagick' and 'chafa' on your system."
     exit 1
 fi
 
-# --- Funzione help ---
+# --- Help function ---
 usage() {
-    echo "Utilizzo: $0 [OPZIONI]"
+    echo "Usage: $0 [OPTIONS]"
     echo ""
-    echo "Opzioni:"
-    echo "  -f FONT          Nome del font (es: 'DejaVu-Sans-Bold')"
-    echo "  -m MESSAGGIO     Testo da visualizzare"
-    echo "  -c COLORE        Schema colori: sky (def), fire, forest, neon, sunset, ocean, cyberpunk"
-    echo "  -s DIMENSIONE    Dimensione del carattere (def: 72)"
-    echo "  -h               Mostra questo aiuto"
+    echo "Options:"
+    echo "  -f FONT          Font Name (example: 'DejaVu-Sans-Bold')"
+    echo "  -m MESSAGE       Text to output"
+    echo "  -c COLOR         Color scheme: sky (def), fire, forest, neon, sunset, ocean, cyberpunk"
+    echo "  -s SIZE          Font Size in points (def: 72)"
+    echo "  -h               Show this help"
     exit 1
 }
 
-# --- Parsing degli argomenti ---
+# --- Parsing arguments ---
 while getopts "f:m:c:s:h" opt; do
     case $opt in
         f) FONT="$OPTARG" ;;
@@ -43,7 +36,7 @@ while getopts "f:m:c:s:h" opt; do
     esac
 done
 
-# --- Definizione dei Gradienti ---
+# --- Gradients ---
 # Barycentric: 0,0 (top-left) | %[fx:w],0 (top-right) | %[fx:w],%[fx:h] (bottom-right)
 case $COLOR_SCHEME in
     fire) 
@@ -69,8 +62,7 @@ case $COLOR_SCHEME in
         ;;
 esac
 
-# --- Generazione e Visualizzazione ---
-# Generiamo l'immagine tramite label: e applichiamo il gradiente come maschera
+# --- Create text as image ---
 magick -background none -pointsize "$SIZE" -font "$FONT" \
     label:"$MESSAGE" \
     \( +clone -sparse-color Barycentric "$GRADIENT" \) \
